@@ -11,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.intentsapp.data.local.entities.ImagesEntity;
 import com.example.intentsapp.databinding.FragmentDetailBottomSheetBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.io.IOException;
 
 public class DetailBottomSheetFragment extends BottomSheetDialogFragment {
     private int mParam1;
@@ -73,15 +76,13 @@ public class DetailBottomSheetFragment extends BottomSheetDialogFragment {
             get_binding().tvTitle.setText(img.title);
         });
         get_binding().btnDelete.setOnClickListener( (v) -> {
-            viewModel.deleteItem(imgState.id);
+            try {
+                viewModel.deleteItem(imgState);
+            } catch (IOException e) {
+                Log.i("NO", e.getMessage());
+                throw new RuntimeException(e);
+            }
             this.dismiss();
         }  );
-        get_binding().btnEdit.setOnClickListener( (v) -> {
-            NavController navController = Navigation.findNavController(requireView());
-            Bundle args = new Bundle();
-            args.putBoolean("editMode", true);
-            args.putInt("imgId" ,imgState.id);
-            navController.navigate(R.id.action_listFragment_to_addFragment,args);
-        } );
     }
 }

@@ -1,8 +1,10 @@
 package com.example.intentsapp.utilities;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +12,7 @@ import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -69,7 +72,8 @@ public class Utilities {
             if (!storageDir.exists()) {
                 boolean success = storageDir.mkdirs();
                 if (!success) {
-                    Toast.makeText(context, "Could not create needed directories", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Could not create needed directories",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -88,15 +92,36 @@ public class Utilities {
             inputStream.close();
 
             //Devuelve la uri del nuevo archivo
-            return FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", imageFile);
+            return FileProvider.getUriForFile(context,
+                    context.getApplicationContext().getPackageName() + ".provider", imageFile);
 
 
         } catch (Exception e){
             e.printStackTrace();
             return null;
         }
+    }
 
+    public static void deleteFromInternStorage(String uriString, Context context) throws IOException {
+        Uri uri = Uri.parse(uriString);
+        File file = new File(uri.getPath());
+        file.delete();
+        if(file.exists()){
+            Log.i("DELETE", "TODAVIA NO");
+            file.getCanonicalFile().delete();
+            if(file.exists()){
+                Log.i("DELETE", "TODAVIA NO");
+                context.deleteFile(file.getName());
+                if(!file.exists()) {
+                    Log.i("DELETE", "SI O SI");
+                }
+            } else {
+                Log.i("DELETE", "file.getCanonicalFile().delete()");
+            }
+        } else {
+            Log.i("DELETE", "file.delete()");
 
+        }
     }
 
 

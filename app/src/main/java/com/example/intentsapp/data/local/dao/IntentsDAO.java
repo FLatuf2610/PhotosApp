@@ -1,7 +1,5 @@
 package com.example.intentsapp.data.local.dao;
 
-import android.provider.ContactsContract;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -26,8 +24,8 @@ public interface IntentsDAO {
     @Query("SELECT * FROM imagesentity WHERE id == :id")
     public ImagesEntity getImageById(int id);
 
-    @Query("DELETE FROM imagesentity WHERE id == :id")
-    public void deleteImage(int id);
+    @Delete
+    public void deleteImage(ImagesEntity imageEntity);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void editImage(ImagesEntity img);

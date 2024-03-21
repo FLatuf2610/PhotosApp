@@ -62,7 +62,4 @@ public class AddViewModel extends ViewModel {
         return repository.getImageById(id);
     }
 
-    public void editImage(ImagesEntity img) {
-        repository.editImage(img);
-    }
 }
